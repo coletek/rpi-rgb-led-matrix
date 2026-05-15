@@ -549,6 +549,38 @@ public:
   }
 };
 
+class P2Outdoor64x64HalfScanMapper : public MultiplexMapperBase {
+public:
+  P2Outdoor64x64HalfScanMapper() :
+    MultiplexMapperBase("P2Outdoor64x64HalfScanMapper", 2) {}
+  
+  void MapSinglePanel(int x, int y, int *matrix_x, int *matrix_y) const {
+    int y2 = y >> 4;
+
+    switch (y2) {
+      case 0:
+        *matrix_x = x * 2 + 1;
+        *matrix_y = y;
+        break;
+
+      case 1:
+        *matrix_x = x * 2;
+        *matrix_y = y - 16;
+        break;
+
+      case 2:
+        *matrix_x = x * 2 + 1;
+        *matrix_y = y - 16;
+        break;
+
+      case 3:
+        *matrix_x = x * 2;
+        *matrix_y = y - 32;
+        break;
+    }
+  }
+};
+  
 /*
  * Here is where the registration happens.
  * If you add an instance of the mapper here, it will automatically be
@@ -580,6 +612,7 @@ static MuxMapperList *CreateMultiplexMapperList() {
   result->push_back(new P3Outdoor64x64MultiplexMapper());
   result->push_back(new DoubleZMultiplexMapper());
   result->push_back(new P4Outdoor80x40Mapper());
+  result->push_back(new P2Outdoor64x64HalfScanMapper());
   return result;
 }
 
